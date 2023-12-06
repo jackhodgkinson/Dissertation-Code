@@ -360,5 +360,11 @@ def data_loader(name, batch_size):
 for i in range(len(datasets)):
     data_loader(datasets[i], BATCH_SIZE)
 
-lda = LDA(n_components=2)
-lda.fit(breastmnist_train, breastmnist_train.labels).transform(breastmnist_train_loader)
+# Extract features and labels
+X = breastmnist_train.imgs
+X = X.reshape(X.shape[0],-1)
+y = np.ravel(breastmnist_train.labels)
+
+# Begin Linear Discriminant Analysis
+lda = LDA()
+lda.fit(X, y).transform(X)
