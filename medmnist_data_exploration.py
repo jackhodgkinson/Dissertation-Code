@@ -293,13 +293,12 @@ OrganMNISTAxial = OrganAMNIST
 OrganMNISTCoronal = OrganCMNIST
 OrganMNISTSagittal = OrganSMNIST
 
-# Function to name the datasets
 def dataset_namer(input_name, suffix):
-    global str
-    str = f"{input_name}_{suffix}"
-    return str
+    global string
+    string = f"{input_name}_{suffix}"
+    return string
 
-datasets = []
+datasets = {}
 
 # Function to generate MedMNIST datasets
 def medmnist_generator(data_flag, split):
@@ -320,12 +319,18 @@ def medmnist_generator(data_flag, split):
     name = dataset_namer(data_flag, split)
     
     global datasets
-    datasets.append(name)
-  
+
     if '3d' not in name: 
-        globals()[name] = DataClass(split=split,transform=data_transform,download=True)
+        value = DataClass(split=split,transform=data_transform,download=True) 
+        entry = {name: value}
+        datasets.update(entry)
+        globals()[name] = value
     else:
-        globals()[name] = DataClass(split=split, download=True)
+        value = DataClass(split=split, download=True)
+        entry = {name: value}
+        datasets.update(entry)
+        globals()[name] = value
+
         
 data_flag = ('pathmnist','dermamnist','breastmnist','nodulemnist3d')
 split = ('train','test','val')
@@ -336,7 +341,6 @@ for i in range(len(data_flag)):
 
 print(breastmnist_train)
 print(nodulemnist3d_test)
-print(datasets)
 
 breastmnist_train.montage(length=7)
 
@@ -357,14 +361,47 @@ def data_loader(name, batch_size):
         globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = False)
 
 # Run function over all our datasets
-for i in range(len(datasets)):
-    data_loader(datasets[i], BATCH_SIZE)
+for key in datasets.keys():
+    data_loader(key, BATCH_SIZE)
 
-# Extract features and labels
-X = breastmnist_train.imgs
-X = X.reshape(X.shape[0],-1)
-y = np.ravel(breastmnist_train.labels)
+# Turns the variable name into a string
+def variable_name(variable):
+    for name, object in chain(globals().items(), locals().items()):
+        if object is variable:
+            return name
+    return None # didn't find anything...
 
-# Begin Linear Discriminant Analysis
+features_and_labels = {}
+
+def features_labels(key, value):   
+
+    X = value.imgs
+    X = X.reshape(X.shape[0], -1)
+    X = torch.from_numpy(X)
+    
+    y = value.labels
+    y = np.ravel(y)
+    y = torch.from_numpy(y)
+    
+    features = dataset_namer(key, "features")
+    labels = dataset_namer(key, "labels")
+    
+    global features_and_labels
+    entry = {X : y}
+    features_and_labels.update(entry)
+    
+    globals()[features] = X
+    globals()[labels] = y
+    
+for key, value in datasets.items():
+    features_labels(key, value)
+
+# Naive Bayes 
+naive_bayes = GaussianNB()
+naive_bayes.fit(breastmnist_train_features, breastmnist_train_labels)
+naive_bayes.score(breastmnist_test_features, breastmnist_test_labels)
+
+# Linear Discriminant Analysis
 lda = LDA()
-lda.fit(X, y).transform(X)
+lda.fit(breastmnist_train_features, breastmnist_train_labels).transform(breastmnist_train_features)
+lda.score(breastmnist_test_features, breastmnist_test_labels)
