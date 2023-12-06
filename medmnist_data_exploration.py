@@ -1,13 +1,25 @@
 from tqdm import tqdm
+
 import numpy as np
+import pandas as pd 
+import matplotlib.pyplot as plt 
 import torch
-import sklearn as skl
-import torch.nn as nn
-import torch.optim as optim
-import torch.utils.data as data, dataset
-import torchvision.transforms as transforms
+import sklearn
 import os 
 from PIL import Image
+
+from sklearn.discriminant_analysis import \
+(LinearDiscriminantAnalysis as LDA, 
+ QuadraticDiscriminantAnalysis as QDA)
+from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+
+import torch.nn as nn
+import torch.optim as optim
+import torch.utils.data as data
+from data import Dataset
+import torchvision.transforms as transforms
 
 import medmnist
 from medmnist import INFO, Evaluator, HOMEPAGE, DEFAULT_ROOT
@@ -244,11 +256,53 @@ class OrganAMNIST(MedMNIST2D):
     flag = "organamnist"
 
 
-def medmnist_generator(data_flag, split):
+class OrganCMNIST(MedMNIST2D):
+    flag = "organcmnist"
 
-    NUM_EPOCHS = 3
-    BATCH_SIZE = 128
-    lr = 0.001
+
+class OrganSMNIST(MedMNIST2D):
+    flag = "organsmnist"
+
+
+class OrganMNIST3D(MedMNIST3D):
+    flag = "organmnist3d"
+
+
+class NoduleMNIST3D(MedMNIST3D):
+    flag = "nodulemnist3d"
+
+
+class AdrenalMNIST3D(MedMNIST3D):
+    flag = "adrenalmnist3d"
+
+
+class FractureMNIST3D(MedMNIST3D):
+    flag = "fracturemnist3d"
+
+
+class VesselMNIST3D(MedMNIST3D):
+    flag = "vesselmnist3d"
+
+
+class SynapseMNIST3D(MedMNIST3D):
+    flag = "synapsemnist3d"
+
+
+# backward-compatible
+OrganMNISTAxial = OrganAMNIST
+OrganMNISTCoronal = OrganCMNIST
+OrganMNISTSagittal = OrganSMNIST
+
+# Function to name the datasets
+def dataset_namer(input_name, suffix):
+    global str
+    str = f"{input_name}_{suffix}"
+    return str
+
+datasets = []
+
+# Function to generate MedMNIST datasets
+def medmnist_generator(data_flag, split):
 
     info = INFO[data_flag]
     task = info['task']
@@ -258,23 +312,21 @@ def medmnist_generator(data_flag, split):
     DataClass = getattr(medmnist, info['python_class'])
 
     # preprocessing
-    if '3d' not in data_flag:
-        data_transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[.5], std=[.5])
+    data_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[.5], std=[.5])
         ])
-        
-    def dataset_namer(data_flag, split):
-        global str
-        str = f"{data_flag}_{split}"
-        return str
-
+    
     name = dataset_namer(data_flag, split)
+    
+    global datasets
+    datasets.append(name)
+  
     if '3d' not in name: 
         globals()[name] = DataClass(split=split,transform=data_transform,download=True)
     else:
         globals()[name] = DataClass(split=split, download=True)
-    
+        
 data_flag = ('pathmnist','dermamnist','breastmnist','nodulemnist3d')
 split = ('train','test','val')
 
@@ -282,6 +334,31 @@ for i in range(len(data_flag)):
     for j in range(len(split)): 
         medmnist_generator(data_flag[i], split[j])
 
+print(breastmnist_train)
+print(nodulemnist3d_test)
+print(datasets)
+
 breastmnist_train.montage(length=7)
+
 frames = nodulemnist3d_test.montage(length=6)
 frames[10] #We do this to visualise one layer of the 3D image
+
+# Pre-processing quantities needed
+NUM_EPOCHS = 3
+BATCH_SIZE = 128
+lr = 0.001
+
+# Function to transform data into dataloader form for deep learning
+def data_loader(name, batch_size):
+    name = dataset_namer(name, "loader")
+    if 'train' in name:
+        globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = True)
+    else: 
+        globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = False)
+
+# Run function over all our datasets
+for i in range(len(datasets)):
+    data_loader(datasets[i], BATCH_SIZE)
+
+lda = LDA(n_components=2)
+lda.fit(breastmnist_train, breastmnist_train.labels).transform(breastmnist_train_loader)
