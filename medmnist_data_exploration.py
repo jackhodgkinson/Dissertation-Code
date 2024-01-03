@@ -1,3 +1,4 @@
+# Import Relevant Packages and Functions 
 from tqdm import tqdm
 
 import numpy as np
@@ -24,6 +25,7 @@ import torchvision.transforms as transforms
 import medmnist
 from medmnist import INFO, Evaluator, HOMEPAGE, DEFAULT_ROOT
 
+#Loads each of the MedMNIST datasets and gives each of them a flag.
 class MedMNIST(Dataset):
 
     flag = ...
@@ -293,6 +295,7 @@ OrganMNISTAxial = OrganAMNIST
 OrganMNISTCoronal = OrganCMNIST
 OrganMNISTSagittal = OrganSMNIST
 
+# Function to name the datasets
 def dataset_namer(input_name, suffix):
     global string
     string = f"{input_name}_{suffix}"
@@ -310,7 +313,7 @@ def medmnist_generator(data_flag, split):
 
     DataClass = getattr(medmnist, info['python_class'])
 
-    # preprocessing
+    # Pre-processing
     data_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[.5], std=[.5])
@@ -331,19 +334,25 @@ def medmnist_generator(data_flag, split):
         datasets.update(entry)
         globals()[name] = value
 
-        
+# Specify Data Flags and Data Splits        
 data_flag = ('pathmnist','dermamnist','breastmnist','nodulemnist3d')
 split = ('train','test','val')
 
+# For Loops to Generate Data
 for i in range(len(data_flag)):
     for j in range(len(split)): 
         medmnist_generator(data_flag[i], split[j])
 
+# Show information for BreastMNIST
 print(breastmnist_train)
+
+# Show information for NoduleMNIST3D
 print(nodulemnist3d_test)
 
+# Display 7x7 grid (49 samples) of BreastMNIST images
 breastmnist_train.montage(length=7)
 
+# Visualise one layer of a 6x6 Nodule images 
 frames = nodulemnist3d_test.montage(length=6)
 frames[10] #We do this to visualise one layer of the 3D image
 
@@ -373,6 +382,7 @@ def variable_name(variable):
 
 features_and_labels = {}
 
+# Function to extract features and labels from datasets
 def features_labels(key, value):   
 
     X = value.imgs
@@ -392,16 +402,28 @@ def features_labels(key, value):
     
     globals()[features] = X
     globals()[labels] = y
-    
+
+# For loop to extract features and labels for all datasets in the dictionary  
 for key, value in datasets.items():
     features_labels(key, value)
 
-# Naive Bayes 
+# Naive Bayes Model Fitting  
 naive_bayes = GaussianNB()
 naive_bayes.fit(breastmnist_train_features, breastmnist_train_labels)
-naive_bayes.score(breastmnist_test_features, breastmnist_test_labels)
 
-# Linear Discriminant Analysis
+# Quadratic Disciminant Analysis Model Fitting 
+qda = QDA()
+qda.fit(breastmnist_train_features, breastmnist_train_labels)
+
+# Linear Discriminant Analysis Model Fitting
 lda = LDA()
 lda.fit(breastmnist_train_features, breastmnist_train_labels).transform(breastmnist_train_features)
+
+# Naive Bayes Accuracy Score
+naive_bayes.score(breastmnist_test_features, breastmnist_test_labels)
+
+# QDA Accuracy Score
+qda.score(breastmnist_test_features, breastmnist_test_labels) 
+
+# LDA Accuracy Score
 lda.score(breastmnist_test_features, breastmnist_test_labels)
