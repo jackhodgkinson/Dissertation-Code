@@ -343,6 +343,12 @@ for i in range(len(data_flag)):
     for j in range(len(split)): 
         medmnist_generator(data_flag[i], split[j])
 
+# Show information for PathMNIST
+print(pathmnist_train)
+
+# Show informatuon for DermaMNIST
+print(dermamnist_train)
+
 # Show information for BreastMNIST
 print(breastmnist_train)
 
