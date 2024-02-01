@@ -9,12 +9,10 @@ import torch
 import sklearn
 import os 
 import random
+import itertools
 from PIL import Image
 
-from sklearn.discriminant_analysis import \
-(LinearDiscriminantAnalysis as LDA, 
- QuadraticDiscriminantAnalysis as QDA)
-from sklearn.naive_bayes import GaussianNB
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
@@ -362,15 +360,19 @@ def shuffle_iterator(iterator):
             random.shuffle(index)
 
 # Function to name the datasets
-def dataset_namer(input_name, suffix):
+def dataset_namer(input_name, suffix, size=''):
     global string
-    string = f"{input_name}_{suffix}"
+    if size != '':
+        string = f"{input_name}_{suffix}_{size}"
+    else:
+        string = f"{input_name}_{suffix}"
+        
     return string
 
 datasets = {}
 
 # Function to generate MedMNIST datasets
-def medmnist_generator(data_flag, split):
+def medmnist_generator(data_flag, split, size):
 
     info = INFO[data_flag]
     task = info['task']
@@ -379,54 +381,65 @@ def medmnist_generator(data_flag, split):
 
     DataClass = getattr(medmnist, info['python_class'])
 
-    # Pre-processing
+    # Preprocessing
     data_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[.5], std=[.5])
         ])
     
-    name = dataset_namer(data_flag, split)
+    name = dataset_namer(data_flag, split, size)
+    print(name)
     
     global datasets
 
-    if '3d' not in name: 
-        value = DataClass(split=split,transform=data_transform,download=True) 
-        entry = {name: value}
-        datasets.update(entry)
-        globals()[name] = value
-    else:
-        value = DataClass(split=split, download=True)
-        entry = {name: value}
-        datasets.update(entry)
-        globals()[name] = value
+    value = DataClass(split=split, size=int(size), transform=data_transform,download=True) 
+    entry = {name: value}
+    datasets.update(entry)
+    globals()[name] = value
 
-# Specify Data Flags and Data Splits        
-data_flag = ('pathmnist','dermamnist','breastmnist','nodulemnist3d')
+
+# Specify Data Flags and Data Splits
+data_flag = ('pathmnist','dermamnist','breastmnist')
 split = ('train','test','val')
+size = (28,64,128,224)
 
-# For Loops to Generate Data
-for i in range(len(data_flag)):
-    for j in range(len(split)): 
-        medmnist_generator(data_flag[i], split[j])
+# For Loop to Generate Data
+for a, b, c in itertools.product(data_flag, split, size): 
+    medmnist_generator(a,b,c)
+
+# Generate 7x7 grid (49 samples) original low resolution images
+breastmnist_train_28.montage(length=7).save("breastmnist_lowres_sample.jpeg")
+pathmnist_train_28.montage(length=7).save("pathmnist_lowres_sample.jpeg")
+dermamnist_train_28.montage(length=7).save("dermamnist_lowres_sample.jpeg")
+
+# Generate 7x7 grid (49 samples) highest resolution images
+breastmnist_train_224.montage(length=7).save("breastmnist_highres_sample.jpeg")
+pathmnist_train_224.montage(length=7).save("pathmnist_highres_sample.jpeg")
+dermamnist_train_224.montage(length=7).save("dermamnist_highres_sample.jpeg")
+
+# Resolution Comparison 
+dermamnist_train_28.montage(length=7).save("res_comp1.jpeg")
+dermamnist_train_64.montage(length=7).save("res_comp2.jpeg")
+dermamnist_train_128.montage(length=7).save("res_comp3.jpeg")
+dermamnist_train_224.montage(length=7).save("res_comp4.jpeg")
 
 # Show information for PathMNIST
-print(pathmnist_train)
+print(pathmnist_train_28)
+print(pathmnist_train_64)
+print(pathmnist_train_128)
+print(pathmnist_train_224)
 
 # Show informatuon for DermaMNIST
-print(dermamnist_train)
+print(dermamnist_train_28)
+print(dermamnist_train_64)
+print(dermamnist_train_128)
+print(dermamnist_train_224)
 
 # Show information for BreastMNIST
-print(breastmnist_train)
-
-# Show information for NoduleMNIST3D
-print(nodulemnist3d_test)
-
-# Display 7x7 grid (49 samples) of BreastMNIST images
-breastmnist_train.montage(length=7)
-
-# Visualise one layer of a 6x6 Nodule images 
-frames = nodulemnist3d_test.montage(length=6)
-frames[10] #We do this to visualise one layer of the 3D image
+print(breastmnist_train_28)
+print(breastmnist_train_64)
+print(breastmnist_train_128)
+print(breastmnist_train_224)
 
 # Pre-processing quantities needed
 NUM_EPOCHS = 3
@@ -435,7 +448,7 @@ lr = 0.001
 
 # Function to transform data into dataloader form for deep learning
 def data_loader(name, batch_size):
-    name = dataset_namer(name, "loader")
+    name = dataset_namer(name, "loader",'')
     if 'train' in name:
         globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = True)
     else: 
@@ -465,8 +478,8 @@ def features_labels(key, value):
     y = np.ravel(y)
     y = torch.from_numpy(y)
     
-    features = dataset_namer(key, "features")
-    labels = dataset_namer(key, "labels")
+    features = dataset_namer(key, "features", '')
+    labels = dataset_namer(key, "labels", '')
     
     global features_and_labels
     entry = {X : y}
@@ -479,23 +492,47 @@ def features_labels(key, value):
 for key, value in datasets.items():
     features_labels(key, value)
 
-# Naive Bayes Model Fitting  
-naive_bayes = GaussianNB()
-naive_bayes.fit(breastmnist_train_features, breastmnist_train_labels)
-
-# Quadratic Disciminant Analysis Model Fitting 
-qda = QDA()
-qda.fit(breastmnist_train_features, breastmnist_train_labels)
-
+# BEFORE PERFORMING FEATURE SELECTION!
 # Linear Discriminant Analysis Model Fitting
 lda = LDA()
-lda.fit(breastmnist_train_features, breastmnist_train_labels).transform(breastmnist_train_features)
 
-# Naive Bayes Accuracy Score
-naive_bayes.score(breastmnist_test_features, breastmnist_test_labels)
+# For 28x28 images
+lda.fit(breastmnist_train_28_features, breastmnist_train_28_labels).transform(breastmnist_train_28_features)
+lda.score(breastmnist_test_28_features, breastmnist_test_28_labels)
 
-# QDA Accuracy Score
-qda.score(breastmnist_test_features, breastmnist_test_labels) 
+# For 64x64 images
+lda.fit(breastmnist_train_64_features, breastmnist_train_64_labels).transform(breastmnist_train_64_features)
+lda.score(breastmnist_test_64_features, breastmnist_test_64_labels)
 
-# LDA Accuracy Score
-lda.score(breastmnist_test_features, breastmnist_test_labels)
+# For 128x128 images
+lda.fit(breastmnist_train_128_features, breastmnist_train_128_labels).transform(breastmnist_train_128_features)
+lda.score(breastmnist_test_128_features, breastmnist_test_128_labels)
+
+# For 224x224 images
+lda.fit(breastmnist_train_224_features, breastmnist_train_128_labels).transform(breastmnist_train_224_features)
+lda.score(breastmnist_test_224_features, breastmnist_test_224_labels)
+
+# FEATURE SELECTION
+# Function for Percentile Feature Selection 
+def feature_select(percentage, val_features, val_labels):
+
+    Best_MI = SelectPercentile(MI, percentile = int(percentage))
+    Best_MI.fit(val_features, val_labels)
+    Best_chi2 = SelectPercentile(chi2, percentile = int(percentage))
+    Best_chi2.fit(val_features, val_labels)
+    Best_F = SelectPercentile(f_classif, percentile = int(percentage))
+    Best_F.fit(val_features, val_labels)
+    
+    df_scores = pd.DataFrame({'MIScore': Best_MI.scores_, 'MI_pvalue': Best_MI.pvalues_, 
+                              'Chi2Score': Best_chi2.scores_, 'Chi2_pValue': Best_chi2.pvalues_ ,
+                            'FScore': Best_F.scores_, 'F_pValue': Best_F.pvalues_})
+    df_scores.sort_values(by = ['MIScore','Chi2Score','FScore'], ascending = False)
+    
+    return df_scores
+
+# Need to insert features and order the features! 
+    
+# Once variable selection done you need to remove the variables from train and test 
+# and refit LDA and then run again! 
+    
+feature_select(20, breastmnist_val_features, breastmnist_val_labels)
