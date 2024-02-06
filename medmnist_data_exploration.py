@@ -1,4 +1,5 @@
-# Import Relevant Packages and Functions 
+# MedMNIST Data Exploration - Python File 
+## Package Import 
 
 from tqdm import tqdm
 
@@ -30,7 +31,7 @@ except ImportError:
     from collections import Sequence
 
 
-#Loads each of the MedMNIST datasets and gives each of them a flag.
+## MedMNISTv2 code to load the datasetst 
 class MedMNIST(Sequence):
 
     flag = ...
@@ -359,8 +360,14 @@ def shuffle_iterator(iterator):
             i = 0
             random.shuffle(index)
 
-# Function to name the datasets
-def dataset_namer(input_name, suffix, size=''):
+## Functions for Analyses 
+### Setup 
+datasets = {}
+features = {}
+labels = {}
+
+### Function to name datasets 
+def dataset_namer(input_name, suffix, size=''): #size as optional parameter!
     global string
     if size != '':
         string = f"{input_name}_{suffix}_{size}"
@@ -369,11 +376,10 @@ def dataset_namer(input_name, suffix, size=''):
         
     return string
 
-datasets = {}
-
-# Function to generate MedMNIST datasets
+### Function to generate MedMNIST datasets
 def medmnist_generator(data_flag, split, size):
 
+    # Taken from MedMNIST v2 GitHub
     info = INFO[data_flag]
     task = info['task']
     n_channels = info['n_channels']
@@ -387,152 +393,207 @@ def medmnist_generator(data_flag, split, size):
         transforms.Normalize(mean=[.5], std=[.5])
         ])
     
+    # Use of Dataset_Namer function to encode outputs
     name = dataset_namer(data_flag, split, size)
-    print(name)
     
     global datasets
-
+    
+    # Splits each dataset into training, validation and testing dataset. 
     value = DataClass(split=split, size=int(size), transform=data_transform,download=True) 
     entry = {name: value}
     datasets.update(entry)
+    
     globals()[name] = value
 
+### Function to retrieve variable name as a string
+def get_var_name(input_var):
+    for name, var in globals().items():
+        if var is input_var:
+            return name
+    return None
 
-# Specify Data Flags and Data Splits
-data_flag = ('pathmnist','dermamnist','breastmnist')
-split = ('train','test','val')
-size = (28,64,128,224)
+### Function to extract features and labels from MedMNIST image data
+def features_labels(key, value):   
 
-# For Loop to Generate Data
-for a, b, c in itertools.product(data_flag, split, size): 
-    medmnist_generator(a,b,c)
+    # Extract features and transform to torch
+    X = value.imgs
+    X = X.reshape(X.shape[0], -1)
+    X = torch.from_numpy(X)
+    
+    # Extract labels and transform to torch
+    y = value.labels
+    y = np.ravel(y)
+    y = torch.from_numpy(y)
+    
+    # Name feature and labels datasets
+    f_name = dataset_namer(key, "features", '')
+    l_name = dataset_namer(key, "labels", '')
+    
+    globals()[f_name] = X
+    globals()[l_name] = y
+    
+    global features, labels
 
-# Generate 7x7 grid (49 samples) original low resolution images
-breastmnist_train_28.montage(length=7).save("breastmnist_lowres_sample.jpeg")
-pathmnist_train_28.montage(length=7).save("pathmnist_lowres_sample.jpeg")
-dermamnist_train_28.montage(length=7).save("dermamnist_lowres_sample.jpeg")
+    f_entry = {f_name: X}
+    features.update(f_entry) 
 
-# Generate 7x7 grid (49 samples) highest resolution images
-breastmnist_train_224.montage(length=7).save("breastmnist_highres_sample.jpeg")
-pathmnist_train_224.montage(length=7).save("pathmnist_highres_sample.jpeg")
-dermamnist_train_224.montage(length=7).save("dermamnist_highres_sample.jpeg")
+    l_entry = {l_name: y}
+    labels.update(l_entry)
 
-# Resolution Comparison 
-dermamnist_train_28.montage(length=7).save("res_comp1.jpeg")
-dermamnist_train_64.montage(length=7).save("res_comp2.jpeg")
-dermamnist_train_128.montage(length=7).save("res_comp3.jpeg")
-dermamnist_train_224.montage(length=7).save("res_comp4.jpeg")
+### Function to split dictionaries by specified split
+def dict_split(dictionary, split):
+    
+    new_dict = {}
+    
+    for key, value in dictionary.items():
+        if split in key:
+            name = dataset_namer(split, get_var_name(dictionary))
+            new_dict[key] = value
+            globals()[name] = new_dict    
 
-# Show information for PathMNIST
-print(pathmnist_train_28)
-print(pathmnist_train_64)
-print(pathmnist_train_128)
-print(pathmnist_train_224)
-
-# Show informatuon for DermaMNIST
-print(dermamnist_train_28)
-print(dermamnist_train_64)
-print(dermamnist_train_128)
-print(dermamnist_train_224)
-
-# Show information for BreastMNIST
-print(breastmnist_train_28)
-print(breastmnist_train_64)
-print(breastmnist_train_128)
-print(breastmnist_train_224)
-
-# Pre-processing quantities needed
-NUM_EPOCHS = 3
-BATCH_SIZE = 128
-lr = 0.001
-
-# Function to transform data into dataloader form for deep learning
+### Function to transform data into dataloader form for deep learning 
 def data_loader(name, batch_size):
-    name = dataset_namer(name, "loader",'')
+    name = dataset_namer(name, "loader", '')
     if 'train' in name:
         globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = True)
     else: 
         globals()[name] = data.DataLoader(dataset = name, batch_size = BATCH_SIZE, shuffle = False)
 
-# Run function over all our datasets
-for key in datasets.keys():
-    data_loader(key, BATCH_SIZE)
-
-# Turns the variable name into a string
-def variable_name(variable):
-    for name, object in chain(globals().items(), locals().items()):
-        if object is variable:
-            return name
-    return None # didn't find anything...
-
-features_and_labels = {}
-
-# Function to extract features and labels from datasets
-def features_labels(key, value):   
-
-    X = value.imgs
-    X = X.reshape(X.shape[0], -1)
-    X = torch.from_numpy(X)
+### Function for principal component analysis (linear and non-linear kernels)
+def pca(data, normalise='Yes', kernel='No',kernel_type='linear'):
     
-    y = value.labels
-    y = np.ravel(y)
-    y = torch.from_numpy(y)
+    ds_name = variable_name(data)
     
-    features = dataset_namer(key, "features", '')
-    labels = dataset_namer(key, "labels", '')
+    if kernel == 'No':
     
-    global features_and_labels
-    entry = {X : y}
-    features_and_labels.update(entry)
-    
-    globals()[features] = X
-    globals()[labels] = y
+        if normalise == 'Yes':
 
-# For loop to extract features and labels for all datasets in the dictionary  
+            name = dataset_namer(ds_name, "normalised_pca", '')
+
+            def pca_normalise(data):
+
+                data = StandardScaler().fit_transform(data)
+                feature_cols = ['feature'+str(i) for i in range(data.shape[1])]    
+                normalised_features = pd.DataFrame(data,columns=feature_cols)
+                data = normalised_features
+
+                return data
+
+            data = pca_normalise(data)
+
+        elif normalise == 'No': 
+            name = dataset_namer(ds_name, "pca", '')
+
+        else: 
+            print("ERROR: Invalid input to normalise parameter. Please choose 'Yes' or 'No'.")
+
+
+        pca = PCA()
+        principalComponents = pca.fit_transform(data)
+        pca_cols = ['pc'+str(i) for i in range(principalComponents.shape[1])]
+
+        value = pd.DataFrame(data = principalComponents, columns = pca_cols)
+        entry = {name: value}
+        datasets.update(entry)
+        globals()[name] = value
+        
+    elif kernel == 'Yes':
+    
+        if normalise == 'Yes':
+
+            name = dataset_namer(ds_name, "normalised_kernel_pca", '')
+
+            def pca_normalise(data):
+
+                data = StandardScaler().fit_transform(data)
+                feature_cols = ['feature'+str(i) for i in range(data.shape[1])]    
+                normalised_features = pd.DataFrame(data,columns=feature_cols)
+                data = normalised_features
+
+                return data
+
+            data = pca_normalise(data)
+
+        elif normalise == 'No': 
+            name = dataset_namer(ds_name, "kernel_pca", '')
+
+        else: 
+            print("ERROR: Invalid input to normalise parameter. Please choose 'Yes' or 'No'.")
+
+
+        kernel_pca = KernelPCA(kernel=kernel_type)
+        kernel_principalComponents = kernel_pca.fit_transform(data)
+        kernel_pca_cols = ['pc'+str(i) for i in range(kernel_principalComponents.shape[1])]
+
+        value = pd.DataFrame(data = kernel_principalComponents, columns = kernel_pca_cols)
+        entry = {name: value}
+        datasets.update(entry)
+        globals()[name] = value
+    
+    else:
+        print("ERROR: Invalid input to kernel parameter. Please choose 'Yes' or 'No'.")
+
+## Generating the Data
+### Specifying Function Inputs
+
+data_flag = ('pathmnist','dermamnist','breastmnist')
+split = ('train','test','val')
+size = (28,64,128,224)
+
+### Generate Datasets
+for a, b, c in itertools.product(data_flag, split, size): 
+    medmnist_generator(a,b,c)
+
+### Show dataset information
+#### Show information for PathMNIST
+print(pathmnist_train_28)
+print(pathmnist_train_64)
+print(pathmnist_train_128)
+print(pathmnist_train_224)
+
+#### Show information for DermaMNIST
+print(dermamnist_train_28)
+print(dermamnist_train_64)
+print(dermamnist_train_128)
+print(dermamnist_train_224)
+
+#### Show information for BreastMNIST
+print(breastmnist_train_28)
+print(breastmnist_train_64)
+print(breastmnist_train_128)
+print(breastmnist_train_224)   
+
+### Generate Data Samples
+#### Generate 7x7 grid (49 samples) original low resolution images
+breastmnist_train_28.montage(length=7).save("Images/breastmnist_lowres_sample.jpeg")
+pathmnist_train_28.montage(length=7).save("Images/pathmnist_lowres_sample.jpeg")
+dermamnist_train_28.montage(length=7).save("Images/dermamnist_lowres_sample.jpeg")
+
+#### Generate 7x7 grid (49 samples) highest resolution images
+breastmnist_train_224.montage(length=7).save("Images/breastmnist_highres_sample.jpeg")
+pathmnist_train_224.montage(length=7).save("Images/pathmnist_highres_sample.jpeg")
+dermamnist_train_224.montage(length=7).save("Images/dermamnist_highres_sample.jpeg")
+
+#### Resolution Comparison 
+dermamnist_train_28.montage(length=7).save("Images/res_comp1.jpeg")
+dermamnist_train_64.montage(length=7).save("Images/res_comp2.jpeg")
+dermamnist_train_128.montage(length=7).save("Images/res_comp3.jpeg")
+dermamnist_train_224.montage(length=7).save("Images/res_comp4.jpeg")
+
+### Extract Features and Labels from each dataset
 for key, value in datasets.items():
     features_labels(key, value)
 
-# BEFORE PERFORMING FEATURE SELECTION!
-# Linear Discriminant Analysis Model Fitting
-lda = LDA()
+### Split features and labels by train/test/val
+for i in split:
+    dict_split(features, i)
+    dict_split(labels, i)
 
-# For 28x28 images
-lda.fit(breastmnist_train_28_features, breastmnist_train_28_labels).transform(breastmnist_train_28_features)
-lda.score(breastmnist_test_28_features, breastmnist_test_28_labels)
+## Pre-processing 
+### Quantitites needed 
+NUM_EPOCHS = 3
+BATCH_SIZE = 128
+lr = 0.001
 
-# For 64x64 images
-lda.fit(breastmnist_train_64_features, breastmnist_train_64_labels).transform(breastmnist_train_64_features)
-lda.score(breastmnist_test_64_features, breastmnist_test_64_labels)
-
-# For 128x128 images
-lda.fit(breastmnist_train_128_features, breastmnist_train_128_labels).transform(breastmnist_train_128_features)
-lda.score(breastmnist_test_128_features, breastmnist_test_128_labels)
-
-# For 224x224 images
-lda.fit(breastmnist_train_224_features, breastmnist_train_128_labels).transform(breastmnist_train_224_features)
-lda.score(breastmnist_test_224_features, breastmnist_test_224_labels)
-
-# FEATURE SELECTION
-# Function for Percentile Feature Selection 
-def feature_select(percentage, val_features, val_labels):
-
-    Best_MI = SelectPercentile(MI, percentile = int(percentage))
-    Best_MI.fit(val_features, val_labels)
-    Best_chi2 = SelectPercentile(chi2, percentile = int(percentage))
-    Best_chi2.fit(val_features, val_labels)
-    Best_F = SelectPercentile(f_classif, percentile = int(percentage))
-    Best_F.fit(val_features, val_labels)
-    
-    df_scores = pd.DataFrame({'MIScore': Best_MI.scores_, 'MI_pvalue': Best_MI.pvalues_, 
-                              'Chi2Score': Best_chi2.scores_, 'Chi2_pValue': Best_chi2.pvalues_ ,
-                            'FScore': Best_F.scores_, 'F_pValue': Best_F.pvalues_})
-    df_scores.sort_values(by = ['MIScore','Chi2Score','FScore'], ascending = False)
-    
-    return df_scores
-
-# Need to insert features and order the features! 
-    
-# Once variable selection done you need to remove the variables from train and test 
-# and refit LDA and then run again! 
-    
-feature_select(20, breastmnist_val_features, breastmnist_val_labels)
+## Model Fitting - Pre-Feature Selection
+### Linear Discriminant Analysis 
