@@ -567,20 +567,21 @@ print(breastmnist_train_224)
 
 ### Generate Data Samples
 #### Generate 7x7 grid (49 samples) original low resolution images
-breastmnist_train_28.montage(length=7).save("Images/breastmnist_lowres_sample.jpeg")
-pathmnist_train_28.montage(length=7).save("Images/pathmnist_lowres_sample.jpeg")
-dermamnist_train_28.montage(length=7).save("Images/dermamnist_lowres_sample.jpeg")
+#breastmnist_train_28.montage(length=7).save("breastmnist_lowres_sample.jpeg")
+#pathmnist_train_28.montage(length=7).save("pathmnist_lowres_sample.jpeg")
+#dermamnist_train_28.montage(length=7).save("dermamnist_lowres_sample.jpeg")
 
 #### Generate 7x7 grid (49 samples) highest resolution images
-breastmnist_train_224.montage(length=7).save("Images/breastmnist_highres_sample.jpeg")
-pathmnist_train_224.montage(length=7).save("Images/pathmnist_highres_sample.jpeg")
-dermamnist_train_224.montage(length=7).save("Images/dermamnist_highres_sample.jpeg")
+#breastmnist_train_224.montage(length=7).save("breastmnist_highres_sample.jpeg")
+#pathmnist_train_224.montage(length=7).save("pathmnist_highres_sample.jpeg")
+#dermamnist_train_224.montage(length=7).save("dermamnist_highres_sample.jpeg")
 
 #### Resolution Comparison 
-dermamnist_train_28.montage(length=7).save("Images/res_comp1.jpeg")
-dermamnist_train_64.montage(length=7).save("Images/res_comp2.jpeg")
-dermamnist_train_128.montage(length=7).save("Images/res_comp3.jpeg")
-dermamnist_train_224.montage(length=7).save("Images/res_comp4.jpeg")
+#dermamnist_train_28.montage(length=7).save("res_comp1.jpeg")
+#dermamnist_train_64.montage(length=7).save("res_comp2.jpeg")
+#dermamnist_train_128.montage(length=7).save("res_comp3.jpeg")
+#dermamnist_train_224.montage(length=7).save("res_comp4.jpeg")
+
 
 ### Extract Features and Labels from each dataset
 for key, value in datasets.items():
