@@ -1,28 +1,30 @@
 # MedMNIST Data Exploration - Python File 
 ## Package Import 
-
 from tqdm import tqdm
 
 import numpy as np
 import pandas as pd 
+import seaborn as sns
 import matplotlib.pyplot as plt 
 import torch
-import sklearn
+import sklearn 
+import itertools 
 import os 
 import random
-import itertools
 from PIL import Image
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+from sklearn.decomposition import PCA, KernelPCA
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Lasso
+from sklearn.feature_selection import f_classif, chi2, mutual_info_classif as MI, SelectPercentile
 
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data as data
-from data import Dataset
 import torchvision.transforms as transforms
 
+import medmnist
 from medmnist.info import INFO, HOMEPAGE, DEFAULT_ROOT
 
 try:
