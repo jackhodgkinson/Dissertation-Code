@@ -597,3 +597,8 @@ lr = 0.001
 
 ## Model Fitting - Pre-Feature Selection
 ### Linear Discriminant Analysis 
+
+## Deep Learning 
+### Transform data into dataloader form 
+for key in datasets.keys():
+    data_loader(key, BATCH_SIZE)
