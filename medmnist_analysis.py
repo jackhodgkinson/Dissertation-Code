@@ -381,6 +381,8 @@ def dataset_namer(input_name, suffix, size=''): #size as optional parameter!
 ### Function to generate MedMNIST datasets
 def medmnist_generator(data_flag, split, size):
 
+    split = split.sort()
+
     # Taken from MedMNIST v2 GitHub
     info = INFO[data_flag]
     task = info['task']
