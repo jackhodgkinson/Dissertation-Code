@@ -543,7 +543,7 @@ split = ('train','test','val')
 size = (28,64,128,224)
 
 ### Generate Datasets
-for a, b, c in itertools.product(data_flag.sort(), split, size): 
+for a, b, c in itertools.product(sorted(data_flag), split, size): 
     medmnist_generator(a,b,c)
 
 ### Show dataset information
