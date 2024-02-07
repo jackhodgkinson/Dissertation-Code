@@ -10,6 +10,7 @@ import torch
 import sklearn 
 import itertools 
 import os 
+import re
 import random
 from PIL import Image
 
@@ -18,6 +19,7 @@ from sklearn.decomposition import PCA, KernelPCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression, Lasso
 from sklearn.feature_selection import f_classif, chi2, mutual_info_classif as MI, SelectPercentile
+from sklearn.metrics import accuracy_score, log_loss, f1_score, roc_auc_score
 
 import torch.nn as nn
 import torch.optim as optim
@@ -365,6 +367,7 @@ def shuffle_iterator(iterator):
 ## Functions for Analyses 
 ### Setup 
 datasets = {}
+class_number = {}
 features = {}
 labels = {}
 
@@ -395,17 +398,25 @@ def medmnist_generator(data_flag, split, size):
         transforms.Normalize(mean=[.5], std=[.5])
         ])
     
+    global class_number
+    
+    
+    # Creates dictionary with number of classes for all features and labels.
+    name = dataset_namer(data_flag, size)
+    class_entry = {name: n_classes}
+    class_number.update(class_entry)
+    
     # Use of Dataset_Namer function to encode outputs
-    name = dataset_namer(data_flag, split, size)
+    ds_name = dataset_namer(data_flag, split, size)
     
     global datasets
     
     # Splits each dataset into training, validation and testing dataset. 
     value = DataClass(split=split, size=int(size), transform=data_transform,download=True) 
-    entry = {name: value}
+    entry = {ds_name: value}
     datasets.update(entry)
     
-    globals()[name] = value
+    globals()[ds_name] = value
 
 ### Function to retrieve variable name as a string
 def get_var_name(input_var):
@@ -581,7 +592,6 @@ print(breastmnist_train_224)
 #dermamnist_train_64.montage(length=7).save("res_comp2.jpeg")
 #dermamnist_train_128.montage(length=7).save("res_comp3.jpeg")
 #dermamnist_train_224.montage(length=7).save("res_comp4.jpeg")
-
 
 ### Extract Features and Labels from each dataset
 for key, value in datasets.items():
