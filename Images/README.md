@@ -12,8 +12,8 @@ Note the images follow the naming convention of: dataset_resolution_[original/rg
 * **samplenumber** is the number of the sample in the MedMNIST+ collection.
 * **classnumber** is the label that the sample image represents.
   * *BreastMNIST*:
-    * Class0: normal
-    * Class1: benign
+    * Class0: malignant
+    * Class1: normal, benign
      
    * *DermaMNIST*:
      * Class0: actinic keratoses and intraepithelical carcinoma
