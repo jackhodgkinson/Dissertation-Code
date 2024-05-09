@@ -1,0 +1,147 @@
+LDA STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+
+Scores based on validation set:
+Execution Time: 1751.616728 seconds
+Accuracy Score: 0.2762894842063175
+F1 Score: 0.2617416637930768
+Log Loss: 2.1489368605860175
+Prediction Score: 0.12518542491115175
+--------------------------------------------------
+
+--------------------------------------------------
+TESTING THE MODEL: baseline
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: baseline_95
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 3891
+Percentage of kept features: 95%
+
+Scores based on validation set:
+Execution Time: 1345.507148 seconds
+Accuracy Score: 0.27668932427029186
+F1 Score: 0.2614127576565977
+Log Loss: 2.137574017576822
+Prediction Score: 0.1258674734774537
+--------------------
+
+--------------------
+Model: baseline_90
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 3686
+Percentage of kept features: 90%
+
+Scores based on validation set:
+Execution Time: 1503.951978 seconds
+Accuracy Score: 0.2785885645741703
+F1 Score: 0.2630831733802267
+Log Loss: 2.126846431559262
+Prediction Score: 0.12734152544273714
+--------------------
+
+--------------------
+Model: baseline_85
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 3481
+Percentage of kept features: 85%
+
+Scores based on validation set:
+Execution Time: 1394.620537 seconds
+Accuracy Score: 0.282686925229908
+F1 Score: 0.2671819218660968
+Log Loss: 2.115099060814871
+Prediction Score: 0.12998654703296975
+--------------------
+
+--------------------
+Model: baseline_80
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 3276
+Percentage of kept features: 80%
+
+Scores based on validation set:
+Execution Time: 1351.235535 seconds
+Accuracy Score: 0.2850859656137545
+F1 Score: 0.2686632725884827
+Log Loss: 2.1020341531872933
+Prediction Score: 0.1317174693290765
+--------------------
+
+--------------------
+Model: baseline_75
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 3072
+Percentage of kept features: 75%
+
+Scores based on validation set:
+Execution Time: 1180.886449 seconds
+Accuracy Score: 0.2842862854858057
+F1 Score: 0.2672055601356145
+Log Loss: 2.089657826770449
+Prediction Score: 0.13195745220971103
+--------------------
+
+--------------------
+Model: baseline_70
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 2867
+Percentage of kept features: 70%
+
+Scores based on validation set:
+Execution Time: 1044.097155 seconds
+Accuracy Score: 0.2852858856457417
+F1 Score: 0.26871062893392367
+Log Loss: 2.0799805746932605
+Prediction Score: 0.13317348280076233
+--------------------
+
+--------------------
+Model: baseline_65
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 2662
+Percentage of kept features: 65%
+
+Scores based on validation set:
+Execution Time: 995.099211 seconds
+Accuracy Score: 0.2848860455817673
+F1 Score: 0.26779861695719737
+Log Loss: 2.0683066387960922
+Prediction Score: 0.13360800864147207
+--------------------
+
+--------------------
+Model: baseline_60
+Parameters: {}
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 2457
+Percentage of kept features: 60%
+
+Scores based on validation set:
+Execution Time: 939.22774 seconds
+Accuracy Score: 0.28848460615753696
+F1 Score: 0.27063532583337463
+Log Loss: 2.055354076185079
+Prediction Score: 0.13601547744724554
+--------------------
+

@@ -1,0 +1,54 @@
+LOGISTIC REGRESSION STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+Convergence?: N
+
+Scores based on validation set:
+Execution Time: 15.185103 seconds
+Accuracy Score: 0.6640079760717846
+F1 Score: 0.5989783581434274
+Log Loss: 1.2468290966964537
+Prediction Score: 0.5064793312738562
+--------------------------------------------------
+
+--------------------------------------------------
+TESTING THE MODEL: Ridge_LBFGS
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: Ridge_LBFGS_95%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 744
+Percentage of kept features: 95%
+
+Scores based on validation set:
+Execution Time: 8.624173 seconds
+Accuracy Score: 0.6660019940179461
+F1 Score: 0.6027032517775976
+Log Loss: 1.2402180781076604
+Prediction Score: 0.5114847413494203
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_90%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 705
+Percentage of kept features: 90%
+
+Scores based on validation set:
+Execution Time: 8.087583 seconds
+Accuracy Score: 0.6650049850448654
+F1 Score: 0.5975926271095274
+Log Loss: 1.2228022991512633
+Prediction Score: 0.5162721778617653
+--------------------
+

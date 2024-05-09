@@ -1,0 +1,482 @@
+LOGISTIC REGRESSION STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+Convergence?: N
+
+Scores based on validation set:
+Execution Time: 1.965301 seconds
+Accuracy Score: 0.8717948717948718
+F1 Score: 0.9137931034482759
+Log Loss: 1.529478825771221
+Prediction Score: 0.5837243200613734
+--------------------------------------------------
+
+--------------------------------------------------
+TESTING THE MODEL: Ridge_LBFGS
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: Ridge_LBFGS_95%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 744
+Percentage of kept features: 95%
+
+Scores based on validation set:
+Execution Time: 0.92413 seconds
+Accuracy Score: 0.8589743589743589
+F1 Score: 0.905982905982906
+Log Loss: 1.455207753606139
+Prediction Score: 0.606427934631168
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_90%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 705
+Percentage of kept features: 90%
+
+Scores based on validation set:
+Execution Time: 0.87849 seconds
+Accuracy Score: 0.8589743589743589
+F1 Score: 0.905982905982906
+Log Loss: 1.6158273380154948
+Prediction Score: 0.5461466158645782
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_85%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 666
+Percentage of kept features: 85%
+
+Scores based on validation set:
+Execution Time: 0.87114 seconds
+Accuracy Score: 0.8461538461538461
+F1 Score: 0.8983050847457625
+Log Loss: 1.7037293919331238
+Prediction Score: 0.511953054035263
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_80%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 627
+Percentage of kept features: 80%
+
+Scores based on validation set:
+Execution Time: 0.85826 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8888888888888888
+Log Loss: 1.7528110533362127
+Prediction Score: 0.49127435012012016
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_75%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 588
+Percentage of kept features: 75%
+
+Scores based on validation set:
+Execution Time: 0.921535 seconds
+Accuracy Score: 0.8461538461538461
+F1 Score: 0.8983050847457625
+Log Loss: 1.7919557383848606
+Prediction Score: 0.48674721521635855
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_70%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 548
+Percentage of kept features: 70%
+
+Scores based on validation set:
+Execution Time: 0.807187 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8907563025210085
+Log Loss: 1.885606745425198
+Prediction Score: 0.4571710511847913
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_65%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 509
+Percentage of kept features: 65%
+
+Scores based on validation set:
+Execution Time: 0.835702 seconds
+Accuracy Score: 0.8076923076923077
+F1 Score: 0.8739495798319329
+Log Loss: 1.7926739097110107
+Prediction Score: 0.4690317291992415
+--------------------
+
+--------------------
+Model: Ridge_LBFGS_60%
+Parameters: {'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 470
+Percentage of kept features: 60%
+
+Scores based on validation set:
+Execution Time: 0.818419 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8833333333333334
+Log Loss: 1.9957410817632955
+Prediction Score: 0.42687054182919265
+--------------------
+
+--------------------------------------------------
+TESTING THE MODEL: Ridge_SAG
+------------------------------
+Model: Ridge_SAG
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+
+Scores based on validation set:
+Execution Time: 1.739879 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8925619834710744
+Log Loss: 0.46153988909017957
+Prediction Score: 1.86971414345856
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: Ridge_SAG_95%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 744
+Percentage of kept features: 95%
+
+Scores based on validation set:
+Execution Time: 1.709518 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8925619834710744
+Log Loss: 0.46198865411964873
+Prediction Score: 1.8678979466424563
+--------------------
+
+--------------------
+Model: Ridge_SAG_90%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 705
+Percentage of kept features: 90%
+
+Scores based on validation set:
+Execution Time: 1.563972 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8907563025210085
+Log Loss: 0.4566779592915981
+Prediction Score: 1.887642703984183
+--------------------
+
+--------------------
+Model: Ridge_SAG_85%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 666
+Percentage of kept features: 85%
+
+Scores based on validation set:
+Execution Time: 1.68147 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8813559322033898
+Log Loss: 0.4552024003079013
+Prediction Score: 1.8693538869358524
+--------------------
+
+--------------------
+Model: Ridge_SAG_80%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 627
+Percentage of kept features: 80%
+
+Scores based on validation set:
+Execution Time: 1.392273 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8833333333333334
+Log Loss: 0.47095987315883864
+Prediction Score: 1.8089079887189297
+--------------------
+
+--------------------
+Model: Ridge_SAG_75%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 588
+Percentage of kept features: 75%
+
+Scores based on validation set:
+Execution Time: 1.325516 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8833333333333334
+Log Loss: 0.46437679046334485
+Prediction Score: 1.834551369531296
+--------------------
+
+--------------------
+Model: Ridge_SAG_70%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 548
+Percentage of kept features: 70%
+
+Scores based on validation set:
+Execution Time: 1.232758 seconds
+Accuracy Score: 0.8076923076923077
+F1 Score: 0.8760330578512396
+Log Loss: 0.4739943257172638
+Prediction Score: 1.7761028710582967
+--------------------
+
+--------------------
+Model: Ridge_SAG_65%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 509
+Percentage of kept features: 65%
+
+Scores based on validation set:
+Execution Time: 1.148827 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8852459016393444
+Log Loss: 0.46505020566614125
+Prediction Score: 1.833951153412376
+--------------------
+
+--------------------
+Model: Ridge_SAG_60%
+Parameters: {'solver': 'sag', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 470
+Percentage of kept features: 60%
+
+Scores based on validation set:
+Execution Time: 1.060187 seconds
+Accuracy Score: 0.7948717948717948
+F1 Score: 0.8666666666666667
+Log Loss: 0.4800160321075557
+Prediction Score: 1.73071142461984
+--------------------
+
+--------------------------------------------------
+TESTING THE MODEL: Ridge_SAGA
+------------------------------
+Model: Ridge_SAGA
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+
+Scores based on validation set:
+Execution Time: 2.049055 seconds
+Accuracy Score: 0.8461538461538461
+F1 Score: 0.9016393442622951
+Log Loss: 0.4317344219332354
+Prediction Score: 2.0241531617861415
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: Ridge_SAGA_95%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 744
+Percentage of kept features: 95%
+
+Scores based on validation set:
+Execution Time: 1.938898 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8943089430894309
+Log Loss: 0.4329667593228872
+Prediction Score: 1.995121148705051
+--------------------
+
+--------------------
+Model: Ridge_SAGA_90%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 705
+Percentage of kept features: 90%
+
+Scores based on validation set:
+Execution Time: 1.991461 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8943089430894309
+Log Loss: 0.4296323346136274
+Prediction Score: 2.010605507586446
+--------------------
+
+--------------------
+Model: Ridge_SAGA_85%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 666
+Percentage of kept features: 85%
+
+Scores based on validation set:
+Execution Time: 1.772528 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8943089430894309
+Log Loss: 0.4263516803180141
+Prediction Score: 2.0260765421800637
+--------------------
+
+--------------------
+Model: Ridge_SAGA_80%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 627
+Percentage of kept features: 80%
+
+Scores based on validation set:
+Execution Time: 1.65538 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8852459016393444
+Log Loss: 0.43715491777093657
+Prediction Score: 1.9509773913214445
+--------------------
+
+--------------------
+Model: Ridge_SAGA_75%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 588
+Percentage of kept features: 75%
+
+Scores based on validation set:
+Execution Time: 1.559223 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8943089430894309
+Log Loss: 0.4346671910441654
+Prediction Score: 1.9873161720264538
+--------------------
+
+--------------------
+Model: Ridge_SAGA_70%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 548
+Percentage of kept features: 70%
+
+Scores based on validation set:
+Execution Time: 1.533281 seconds
+Accuracy Score: 0.8333333333333334
+F1 Score: 0.8925619834710744
+Log Loss: 0.4405096842270613
+Prediction Score: 1.9589754534372423
+--------------------
+
+--------------------
+Model: Ridge_SAGA_65%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 509
+Percentage of kept features: 65%
+
+Scores based on validation set:
+Execution Time: 1.373383 seconds
+Accuracy Score: 0.8076923076923077
+F1 Score: 0.8760330578512396
+Log Loss: 0.4357761247325242
+Prediction Score: 1.9318696803054598
+--------------------
+
+--------------------
+Model: Ridge_SAGA_60%
+Parameters: {'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: Mutual Information
+New number of features: 470
+Percentage of kept features: 60%
+
+Scores based on validation set:
+Execution Time: 1.212073 seconds
+Accuracy Score: 0.8205128205128205
+F1 Score: 0.8852459016393444
+Log Loss: 0.45058800699012735
+Prediction Score: 1.8928141624834003
+--------------------
+
+--------------------------------------------------
+TESTING THE MODEL: LASSO
+------------------------------
+FEATURE SELECTION
+Number of Constant Features Removed: 0
+--------------------
+Model: LASSO
+Parameters: {'penalty': 'l1', 'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: L1 regularisation
+Mean number of features: 784
+Mean percentage of kept features: 100%
+
+Scores based on validation set:
+Execution Time: 4.150394 seconds
+Accuracy Score: 0.8461538461538461
+F1 Score: 0.9016393442622951
+Log Loss: 0.43081778923487474
+Prediction Score: 2.028459866432388
+--------------------
+
