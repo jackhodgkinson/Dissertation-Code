@@ -1,0 +1,31 @@
+LOGISTIC REGRESSION STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+Convergence?: N
+
+Scores based on test set:
+Execution Time 543.927239 seconds
+Accuracy Score: 0.4157381615598886
+F1 Score: 0.3823508884028919
+Log Loss: 1.7174428158546706
+Prediction Score: 0.23234807080479658
+--------------------------------------------------
+
+--------------------------------------------------
+TESTING THE OPTIMAL MODEL
+
+Model Name: optimal_model
+Parameters: {'penalty': 'l1', 'solver': 'saga', 'random_state': 28, 'max_iter': 500, 'multi_class': 'ovr', 'n_jobs': -1}
+Convergence?: N
+Feature Selection?: Y
+Method of Feature Selection: L1 regularisation
+Percentage of kept features: 100%
+
+Scores based on test set:
+Execution Time: 4127.036714 seconds
+Accuracy Score: 0.42186629526462394
+F1 Score: 0.3855011152686092
+Log Loss: 1.7012803063262725
+Prediction Score: 0.2372823007269902

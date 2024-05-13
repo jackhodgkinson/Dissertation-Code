@@ -1,0 +1,27 @@
+LDA STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+
+Scores based on test set:
+Execution Time: 20308.956049 seconds
+Accuracy Score: 0.35598885793871865
+F1 Score: 0.3359101621543647
+Log Loss: 2.560353424998446
+Prediction Score: 0.13511787344231652
+--------------------------------------------------
+
+--------------------------------------------------
+TESTING THE OPTIMAL MODEL
+
+Model Name: optimal_model
+Parameters: {}
+Feature Selection?: N
+
+Scores based on test set:
+Execution Time: 23024.592914 seconds
+Accuracy Score: 0.35598885793871865
+F1 Score: 0.3359101621543647
+Log Loss: 2.560353424998446
+Prediction Score: 0.13511787344231652

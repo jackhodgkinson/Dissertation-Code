@@ -1,0 +1,14 @@
+LDA STATISTICS
+--------------------------------------------------
+TESTING THE FULL MODEL
+
+Model: full_model
+
+Scores based on test set:
+Execution Time: 15766.593998 seconds
+Accuracy Score: 0.6463840399002494
+F1 Score: 0.6138041185912392
+Log Loss: 3.7882476356693373
+Prediction Score: 0.1663286405336631
+--------------------------------------------------
+
