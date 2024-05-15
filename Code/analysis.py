@@ -3,14 +3,14 @@
 ## Package Import
 ### Python Packages 
 import sys
+import random
 
 ### My Modules
 from data_manip import dataset_namer, get_var_name
-from data_loader import data_loader
 from file_path import file_path
 from images import *
 from mach_learn import *
-from medmnist_setup import medmnist_generator
+from medmnist_setup import *
 from stat_learn import *
 
 ## Define analysis function
@@ -32,9 +32,11 @@ def image_analysis(name, data, method, stage, random_seed, colour_change, img_sa
         test = image_convert(test, mode=colour_change)
         val = image_convert(val, mode=colour_change)
     elif 'breast' in name:
-        colour_change = 'gray'
+        colour_change = 'GRAY'
     else:
-        colour_change = 'rgb'
+        colour_change = 'RGB'
+        
+    colour_change = colour_change.lower()
             
     # Save image samples if required
     if img_save == 'Yes':
@@ -55,17 +57,12 @@ def image_analysis(name, data, method, stage, random_seed, colour_change, img_sa
         if stage in ["TRAIN","TRAINING","VALIDATION","VAL","V"]:
             stage = "TRAIN"
             # Define model parameters
-            parameters = {'baseline' : {}, 
-                          'lsqr' : {'solver' : 'lsqr'},
-                          'lsqr_shrinkage' : {'solver' : 'lsqr', 'shrinkage' : 'auto'}}
+            parameters = {'baseline' : {}}
             lda(name,train,test,val,stage,random_seed,parameters,colour_change)
         
         elif stage in ["TEST","TESTING"]:
             stage = "TEST"
-            solver = str(input("Solver: ").lower())
-            shrinkage = str(input("Shrinkage: ").lower())
-            parameters = {'optimal_model': {'solver' : 'svd' if solver == '' else solver, 
-                                            'shrinkage' : None if shrinkage == '' else shrinkage}}
+            parameters = {'optimal_model': {}}
             lda(name,train,test,val,stage,random_seed, parameters, colour_change)
             sys.exit()              
                           
@@ -79,10 +76,10 @@ def image_analysis(name, data, method, stage, random_seed, colour_change, img_sa
         if stage in ["TRAIN","TRAINING","VALIDATION","VAL","V"]:
             stage = "TRAIN"
             # Define model parameters
-            parameters = {'Ridge_LBFGS' : {},
-                          'Ridge_NewtonCG' : {'solver' : 'newton-cg'},
-                          'Ridge_SAG' : {'solver' : 'sag', 'random_state' : random_seed},
-                          'LASSO' : {'penalty' : 'l1', 'solver' : 'saga', 'random_state' : random_seed}}
+            parameters = {'Ridge_LBFGS' : {'max_iter' : 500, 'multi_class' : 'ovr', 'n_jobs' : -1},
+                          'Ridge_SAG' : {'solver' : 'sag', 'random_state' : random_seed, 'max_iter' : 500, 'multi_class' : "ovr", 'n_jobs' : -1},
+                          'Ridge_SAGA' : {'solver' : 'saga', 'random_state' : random_seed, 'max_iter' : 500, 'multi_class' : "ovr", 'n_jobs' : -1},
+                          'LASSO' : {'penalty' : 'l1', 'solver' : 'saga', 'random_state' : random_seed, 'max_iter' : 500, 'multi_class' : 'ovr', 'n_jobs' : -1}}
             logistic_regression(name,train,test,val,stage,random_seed,parameters,colour_change)
             
         elif stage in ["TEST","TESTING"]:
@@ -91,7 +88,11 @@ def image_analysis(name, data, method, stage, random_seed, colour_change, img_sa
             solver = str(input("Solver: ").lower())
             parameters = {'optimal_model': {'penalty' : 'l2' if penalty == '' else penalty,
                                             'solver' : 'lbfgs' if solver == '' else solver, 
-                                            'random_state' : random_seed if solver != 'lbfgs' else None}}
+                                            'random_state' : random_seed if solver != 'lbfgs' else None,
+                                            'max_iter' : 500,
+                                            'multi_class' : 'ovr',
+                                            'n_jobs' : -1}}
+            
             logistic_regression(name,train,test,val,stage,random_seed, parameters, colour_change)
             sys.exit()              
                           
@@ -107,33 +108,7 @@ def image_analysis(name, data, method, stage, random_seed, colour_change, img_sa
     
     ## XGBoost
     if method in ["XGB","XGBOOST","BOOST"]:
-    
-        if stage in ["TRAIN","TRAINING","VALIDATION","VAL","V"]:
-            stage = "TRAIN"
-            # Define model parameters
-            parameters = {'model1' : {'random_state' : random_seed},
-                          'model2' : {'random_state' : random_seed, 'eta': 0.15},
-                          'model3' : {'random_state' : random_seed, 'eta':0.05}}
-                          
-                          
-            xg_boost(name,train,test,val,stage,random_seed,parameters,colour_change)
-            
-        elif stage in ["TEST","TESTING"]:
-            stage = "TEST"
-            penalty = str(input("Penalty: ").lower())
-            solver = str(input("Solver: ").lower())
-            parameters = {'optimal_model': {'penalty' : 'l2' if penalty == '' else penalty,
-                                            'solver' : 'lbfgs' if solver == '' else solver, 
-                                            'random_state' : random_seed if solver != 'lbfgs' else None}}
-            xg_boost(name,train,test,val,stage,random_seed, parameters, colour_change)
-            sys.exit()              
-                          
-        else:
-            print("Error: The stage parameter does not indicate a stage of model building. Terminating.")
-            sys.exit()
         
- 
+        xg_boost(name,train,test,val,stage,random_seed,colour_change)
             
-            
- 
-
+        
